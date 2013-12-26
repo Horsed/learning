@@ -1,0 +1,5 @@
+<div ng-repeat="thing in things">
+	<a href="#/things/{{thing.id}}" class="thing">{{thing.title}}</a>
+	<p><a ng-repeat="tag in thing.tags" href="#/things/bytag/{{tag.title}}" class="thing label label-info">{{tag.title}}</a></p>
+<hr/>
+</div>

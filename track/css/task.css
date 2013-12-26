@@ -1,0 +1,45 @@
+li.task {
+    background-color: #999;
+    
+    color: #000;
+	
+    margin-top: 1em;
+	margin-left: -3em;	
+	padding: 0.5em;
+	
+	overflow: hidden;
+}
+
+li.active {
+	background-color: #ccc;
+}
+
+.taskHeader {
+	overflow:hidden;
+}
+
+.taskHeader .titleLink {
+	color: black;
+	font-weight: bold;
+}
+
+.taskBody {
+	margin-top: 0.5em;
+}
+
+.taskData {
+	float: left;
+	margin-right: 0.5em;
+}
+ 
+.notes {
+	float: left;
+}
+
+.notes  textarea{
+	width: 600px;
+}
+
+.taskControl {
+    float: right;
+}

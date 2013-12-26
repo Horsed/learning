@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Armata' rel='stylesheet' type='text/css'>
+
+<link href="css/style.css" rel="stylesheet">
+<link href="css/swipe.css" rel="stylesheet">
+<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
+<link href="css/datepicker.css" rel="stylesheet">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js" type="text/javascript"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js  " type="text/javascript"></script>
+<script src="http://cdn.jsdelivr.net/swipe/2.0.0/swipe.js"></script>
+
+<script src="js/bootstrap-datepicker.js" type="text/javascript"></script>
+</head>
+<body class="text-center">
+  <div id="page">
+	  <h1>Haushaltsbuch</h1>
+	  
+	  <script id='accounts' type='text/ractive'>    
+	    <nav class="text-center">
+	      <ul id="nav-items" class="list-unstyled list-inline">
+        {{#konten:konto}}
+        <li class="konto-link {{( konto == 0 ? 'active' : '' )}}">{{name}}</li>
+        {{/konten}}
+	      </ul>
+	    </nav>
+
+  	  <div id="slider" class="swipe">
+	      <div id="account-containers" class="swipe-wrap">
+          {{#konten:konto}}
+          <div id="{{name}}" class="konto">
+            <p>Summe:&nbsp;<strong>{{( sum(buchungen) )}}&nbsp;€</strong></p>
+            <p><button type="button" proxy-tap="new buchung" class="btn btn-mini btn-success glyphicon glyphicon-plus" title="neue Buchung hinzufügen"></button></p>
+            {{#buchungen:buchung}}
+              {{>buchungen}}
+            {{/buchungen}}
+          </div>
+          {{/konten}}
+	      </div>
+  	  </div>
+	
+      <!-- {{>buchungen}} -->
+        {{^edit}}
+          <div proxy-tap="edit buchung" class="buchung well">
+              <div class="pull-left">
+                <div class="text-left">{{description}}: <strong style="color:{{( amount > 0 ? '#4cae4c' : '#d43f3a' )}}">{{amount}}&nbsp;€</strong></div>
+                <div class="text-left">{{date}}</div>
+              </div>              
+          </div>
+        {{/edit}}
+        
+        {{#edit}}
+          <ul class="list-unstyled buchung well">
+            <li><input type="text" value="{{description}}" placeholder="Titel"  class="form-control"/></li>
+            <li><input type="text" value="{{amount}}"      placeholder="Betrag" class="form-control"/></li>
+            <li><input type="text" value="{{date}}"        placeholder="Datum"  class="form-control" name="date"/></li>
+            <li>
+              <button type="button" proxy-tap="save buchung" class="btn btn-mini btn-success pull-left">Buchung speichern</button>
+              <button type="button" proxy-tap="delete buchung" class="btn btn-mini btn-danger pull-right">Buchung löschen</button>
+            </li>
+          </ul>
+        {{/edit}}
+      <!-- {{/buchungen}} -->
+    </script>
+
+  </div>
+  <script src='js/Ractive.js'></script>
+  <script src='js/haushaltsbuch.js'></script>  
+</body>
+</html>

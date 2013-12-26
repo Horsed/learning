@@ -1,0 +1,8 @@
+{{thing.title}}<div class="pull-right">{{thing.user}}</div>
+<hr/>
+<div ng-repeat="answer in thing.answers">
+	&raquo; {{answer.text}}
+	<div class="pull-right">{{answer.user}}</div>
+  <hr/>
+</div>
+<a ng-repeat="tag in thing.tags" href="#/things/bytag/{{tag.title}}" class="thing label label-info">{{tag.title}}</a>

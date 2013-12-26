@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width">
+
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+
+</head>
+<body>
+
+  <h1>Hello world!</h1>
+  
+  <div id="form"></div>
+  <div id="things"></div>
+  <div id="thing"></div>
+  <div id="tag"></div>
+  
+  <script id="form-tmpl" type='text/ractive'>
+    <textarea id="description" placeholder="Description..." value="{{thing.title}}"/>
+    <button proxy-tap="add thing" class="btn">Submit new thing</button>
+    <button proxy-tap="clear new thing" class="btn">Cancel</button>
+  </script>
+  
+  <script id='things-tmpl' type='text/ractive'>
+    {{#things:things}}
+      <div>
+        <a href="#!thing/{{id}}" class="thing">{{title}}</a>
+      </div>
+      {{#tags:tags}}
+        <a href="#!tag/{{title}}" class="thing label label-info">{{title}}</a>
+      {{/tags}}
+    {{/things}}
+  </script>
+  
+  <script id='thing-tmpl' type='text/ractive'>
+    {{#thing.id}}
+      <div>
+        <a href="#!thing/{{thing.title}}" class="thing">{{thing.title}}</a>
+      </div>
+      {{#thing.answers:answers}}
+        {{text}}
+      {{/thing.answers}}
+      <div>
+        {{#thing.tags:tags}}
+          <a href="#!tag/{{title}}" class="thing label label-info">{{title}}</a>
+        {{/thing.tags}}
+      </div>
+    {{/thing.id}}
+  </script>
+  
+  <script id='tag-tmpl' type='text/ractive'>
+    {{#tag.title}}
+      <div>
+        <a href="#!tag/{{tag.title}}" class="tag label label-info">{{tag.title}}</a>
+      </div>
+    {{/tag.title}}
+  </script>
+
+	<script type="text/javascript" src="js/lib/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/underscore.js"></script>
+	<script type="text/javascript" src="js/lib/backbone.js"></script>
+
+	<script type="text/javascript" src="js/lib/ractive.js"></script>
+  <script type="text/javascript" src="js/app/ractives.js"></script>
+  <script type="text/javascript" src="js/app/routes.js"></script>
+
+</body>
+</html>

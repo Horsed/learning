@@ -1,0 +1,12 @@
+{
+  "id": 1,
+  "title" : "1",
+  "user": "Horsed",
+  "answers": [ {
+    "text": "Just call it 'TotalBullshit.java'",
+    "user": "Horsed"
+  } ],
+  "tags" : [ {
+    "title" : "java"
+  } ]
+}

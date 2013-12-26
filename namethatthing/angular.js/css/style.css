@@ -1,0 +1,17 @@
+html {
+  overflow-y: scroll;
+}
+
+.view {
+	width: 820px;
+	margin: 0 auto;
+}
+
+.view form {
+	margin-bottom: 2%;
+}
+
+.view textarea {
+	width: 100%;
+	margin-bottom: 2%;
+}

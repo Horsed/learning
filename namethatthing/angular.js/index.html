@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app="things">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
+
+<script type="text/javascript" src="js/lib/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
+<!--[if IE 8]><script type="text/javascript" src="js/lib/respond.js"></script><![endif]-->
+<script type="text/javascript" src="js/lib/underscore.js"></script>
+<script type="text/javascript" src="js/lib/angular.min.js"></script>
+<script type="text/javascript" src="js/lib/angular-resource.min.js"></script>
+<script type="text/javascript" src="js/services.js"></script>
+<script type="text/javascript" src="js/controllers.js"></script>
+
+</head>
+<body>
+
+  <div class="view">
+  
+	  <h1><a href="#/">Name That Thing</a></h1>
+	  
+	  <form ng-controller="NewThingCtrl" ng-submit="saveThing()">
+		  <textarea ng-model="thing.title" placeholder="Description..."></textarea><br/>
+		  <input type="submit" class="btn" />
+		  <input type="reset" class="btn" />
+	  </form>
+	
+	  <div ng-view class="view"></div>
+  
+  </div>
+
+</body>
+</html>
