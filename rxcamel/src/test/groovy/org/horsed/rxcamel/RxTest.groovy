@@ -1,4 +1,4 @@
-package org.horsed.rxmvn
+package org.horsed.rxcamel
 
 import static org.junit.Assert.*
 
