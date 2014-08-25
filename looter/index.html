@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <p>time: <span class="time"></span></p>
+    <p>horsed ag: <span class="random-price"></span></p>
+    <p>apple inc.<span class="sin-price"></span></p>
+
+    <script>
+      var looter = require('./looter');
+
+      looter.timestampSource.subscribe(function(value) {
+        $('.time').text(value);
+      });
+
+      looter.randomPriceSource.subscribe(function(value) {
+        $('.random-price').text(value);
+      });
+
+      looter.sinPriceSource.subscribe(function(value) {
+        $('.sin-price').text(value);
+      });
+
+    </script>
+  </body>
+</html>
