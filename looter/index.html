@@ -2,15 +2,21 @@
 <html>
   <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- browserify stuff -->
+    <script src="bundle.js"></script>
+    <!-- end browserify stuff -->
   </head>
   <body>
 
     <p>time: <span class="time"></span></p>
     <p>horsed ag: <span class="random-price"></span></p>
-    <p>apple inc.<span class="sin-price"></span></p>
+    <p>apple inc.: <span class="sin-price"></span></p>
+    <p><strong>balance: <span class="balance"></span></strong></p>
 
     <script>
-      var looter = require('./looter');
+      var looter = require('./looter')
+        , Rx = require('rx');
 
       looter.timestampSource.subscribe(function(value) {
         $('.time').text(value);
@@ -24,6 +30,14 @@
         $('.sin-price').text(value);
       });
 
+      var b = looter.randomPriceSource.combineLatest(
+          looter.sinPriceSource,
+          function (x, y) { return x + y; }
+      );
+
+      b.subscribe(function(value) {
+        $('.balance').text(value);
+      });
     </script>
   </body>
 </html>

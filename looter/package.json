@@ -13,7 +13,12 @@
     "moment": "^2.8.2",
     "rx": "^2.3.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^2.1.4",
+    "grunt-contrib-compress": "^0.10.0",
+    "grunt-contrib-watch": "^0.6.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
