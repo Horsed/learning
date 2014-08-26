@@ -3,28 +3,57 @@ var Rx = require('rx')
   , _ = require('lodash')
   , TICK = 2000;
 
-function sinPrice(x, min, max) { return Math.floor((Math.sin(x) + 1) / 2 * (max - min) + min); }
+function sinPrice(min, max, x) { ;return Math.floor((Math.sin(x) + 1) / 2 * (max - min) + min); }
 
 function add(x, d) { return x + d; }
 
 function time() { return moment().format('DD.MM.YYYY hh:mm:ss'); }
 
-var timestampSource = exports.timestampSource = Rx.Observable.interval(100).map(time);
+var gameLoop
+  = exports.gameLoop
+  = Rx.Observable.interval(1000)
 
-var randomPriceSource = exports.randomPriceSource = Rx.Observable.generateWithRelativeTime(
-  _.random(900, 1500),
-  _.constant(true),
-  _.constant(0),
-  _.partial(_.random, 900, 1500, false),
-  _.constant(TICK));
+var timestampSource
+  = exports.timestampSource
+  = gameLoop
+    .map(time)
 
-var sinPriceSource = exports.sinPriceSource = Rx.Observable.generateWithRelativeTime(
-  sinPrice(_.random(1, 3), 1501, 900),
-  _.constant(true),
-  _.partial(add, 0.1),
-  _.partialRight(sinPrice, 900, 1501),
-  _.constant(TICK));
+var randomPriceSource
+  = exports.randomPriceSource
+  = gameLoop
+    .map(_.partial(_.random, 900, 3500, false))
 
-var balance = exports.balance = sinPriceSource.map(function(price) {
-  return price * 15;
-})
+var sinPriceSource
+  = exports.sinPriceSource
+  = gameLoop
+    .map(function(time) { return time / 10; })
+    .map(_.partial(sinPrice, 900, 3501))
+
+var balance
+  = exports.balance
+  = sinPriceSource
+  .combineLatest(
+    randomPriceSource,
+    sinPriceSource,
+    function(r, s) { return r + s; })
+
+var randomGraph
+  = exports.randomGraph
+  = Rx.Observable.combineLatest(
+    gameLoop,
+    randomPriceSource,
+    function(time, price) { return {time: time*10, price: price / 100}; })
+
+var sinusGraph
+  = exports.sinusGraph
+  = Rx.Observable.combineLatest(
+    gameLoop,
+    sinPriceSource,
+    function(time, price) { return {time: time, price: price / 100}; })
+
+var balanceGraph
+  = exports.balanceGraph
+  = Rx.Observable.combineLatest(
+    gameLoop,
+    balance,
+    function(time, balance) { return {time: time, balance: balance / 100}; })

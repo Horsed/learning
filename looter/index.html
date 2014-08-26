@@ -1,43 +1,117 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-    <!-- browserify stuff -->
-    <script src="bundle.js"></script>
-    <!-- end browserify stuff -->
-  </head>
-  <body>
+  <!-- browserify stuff -->
+  <script src="bundle.js"></script>
+  <!-- end browserify stuff -->
+</head>
+<body>
 
-    <p>time: <span class="time"></span></p>
-    <p>horsed ag: <span class="random-price"></span></p>
-    <p>apple inc.: <span class="sin-price"></span></p>
-    <p><strong>balance: <span class="balance"></span></strong></p>
+  <script>
+    var looter = require('./looter')
+      , Rx = require('rx');
+  </script>
 
+  <p>time: <span class="time"></span>
     <script>
-      var looter = require('./looter')
-        , Rx = require('rx');
-
-      looter.timestampSource.subscribe(function(value) {
-        $('.time').text(value);
-      });
-
-      looter.randomPriceSource.subscribe(function(value) {
-        $('.random-price').text(value);
-      });
-
-      looter.sinPriceSource.subscribe(function(value) {
-        $('.sin-price').text(value);
-      });
-
-      var b = looter.randomPriceSource.combineLatest(
-          looter.sinPriceSource,
-          function (x, y) { return x + y; }
-      );
-
-      b.subscribe(function(value) {
-        $('.balance').text(value);
-      });
+      looter.timestampSource
+        .subscribe(function(value) {
+          $('.time').text(value);
+        });
     </script>
-  </body>
+  </p>
+
+  <p>horsed ag: <span class="random-price"></span>
+    <canvas id="horsed" width="200" height="100" style="border:1px solid #000000;"></canvas>
+    <script>
+      looter.randomPriceSource
+        .subscribe(function(value) {
+          $('.random-price').text(value);
+        });
+      
+      var randomCanvas = document.getElementById("horsed");
+      var randomCtx = randomCanvas.getContext("2d");
+      randomCtx.fillStyle = "#000";
+
+      var evenRandomDot = looter.randomGraph
+        .filter(function(dot) { return dot.time % 20 === 0; })
+
+      looter.randomGraph
+        .filter(function(dot) { return dot.time % 20 !== 0; })
+        .combineLatest(
+          evenRandomDot,
+          function(prev, curr) {
+            return {prev: prev, curr: curr};
+          })
+        .subscribe(function(dots) {
+          console.log(dots);
+          randomCtx.beginPath();
+          randomCtx.moveTo(dots.prev.time % randomCanvas.width, randomCanvas.height - dots.prev.price);
+          randomCtx.lineTo(dots.curr.time % randomCanvas.width, randomCanvas.height - dots.curr.price);
+          randomCtx.stroke();
+        });
+      looter.randomGraph
+        .where(function(dot, idx, obs) {
+          return dot.time % randomCanvas.width === 0;
+        })
+        .subscribe(function() {
+          randomCtx.clearRect(0, 0, randomCanvas.width, randomCanvas.height);
+        });
+    </script>
+  </p>
+
+  <p>apple inc.: <span class="sin-price"></span>
+    <canvas id="apple" width="200" height="100" style="border:1px solid #000000;"></canvas>
+    <script>
+      looter.sinPriceSource
+        .subscribe(function(value) {
+          $('.sin-price').text(value);
+        });
+
+      var sinusCanvas = document.getElementById("apple");
+      var sinusCtx = sinusCanvas.getContext("2d");
+      sinusCtx.fillStyle = "#000";
+      
+      looter.sinusGraph.subscribe(function(dot) {
+        sinusCtx.fillRect(dot.time % sinusCanvas.width, sinusCanvas.height - dot.price, 1, 1);        
+      });
+      looter.sinusGraph
+        .where(function(dot, idx, obs) {
+          return dot.time % sinusCanvas.width === 0;
+        })
+        .subscribe(function() {
+          sinusCtx.clearRect(0, 0, sinusCanvas.width, sinusCanvas.height);
+        });
+    </script>
+  </p>
+  
+  <p><strong>balance: <span class="balance"></span></strong>
+    <canvas id="balance" width="200" height="100" style="border:1px solid #000000;"></canvas>
+    <script>
+      looter.balance
+        .subscribe(function(value) {
+          $('.balance').text(value);
+        });
+
+      var balanceCanvas = document.getElementById("balance");
+      var balanceCtx = balanceCanvas.getContext("2d");
+      balanceCtx.fillStyle = "#000";
+
+      looter.balanceGraph
+        .subscribe(function(dot) {
+          balanceCtx.fillRect(dot.time % balanceCanvas.width, balanceCanvas.height - dot.balance, 1, 1);        
+        });
+      looter.balanceGraph
+        .where(function(dot, idx, obs) {
+          return dot.time % balanceCanvas.width === 0;
+        })
+        .subscribe(function() {
+          balanceCtx.clearRect(0, 0, balanceCanvas.width, balanceCanvas.height);
+        });
+    </script>
+  </p>
+
+</body>
 </html>
