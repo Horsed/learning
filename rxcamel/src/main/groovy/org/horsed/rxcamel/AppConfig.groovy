@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Bean
 
 import rx.Observable
 
-class MyRouteBuilder {
+@Configuration
+class AppConfig extends SingleRouteCamelConfiguration implements InitializingBean {
 
     CamelContext camelCtx
     ReactiveCamel rxCtx
